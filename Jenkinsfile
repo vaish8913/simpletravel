@@ -16,8 +16,8 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 sh '''
-                    rm -rf Practice-Labs
-                    git clone https://github.com/vaish8913/Practice-Labs.git
+                    rm -rf simpletravel
+                    git clone https://github.com/vaish8913/simpletravel.git
                 '''
             }
         }
