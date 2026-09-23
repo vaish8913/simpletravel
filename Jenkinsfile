@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME     = "bank"
+        IMAGE_NAME     = "ecommerce"
         IMAGE_TAG      = "v1"
-        CONTAINER_NAME = "my-bank"
+        CONTAINER_NAME = "ecommerce"
     }
 
     triggers {
