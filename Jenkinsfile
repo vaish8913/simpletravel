@@ -22,36 +22,6 @@ pipeline {
             }
         }
 
-        stage('Check for index.html changes') {
-            steps {
-                script {
-                    def changedFiles = []
-                    for (changeLogSet in currentBuild.changeSets) {
-                        for (entry in changeLogSet.items) {
-                            for (file in entry.affectedFiles) {
-                                changedFiles.add(file.path)
-                            }
-                        }
-                    }
-                    echo "Changed files: ${changedFiles}"
-
-                    if (!changedFiles.contains('index.html')) {
-                        echo "index.html not changed. Skipping build/deploy."
-                        currentBuild.result = 'NOT_BUILT'
-                        error("Aborting: index.html not modified in this commit range.")
-                    }
-                }
-            }
-        }
-
-        stage('Build Image') {
-            steps {
-                dir('Practice-Labs') {
-                    sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
-                }
-            }
-        }
-
         stage('Remove Old Container') {
             steps {
                 sh 'docker rm -f ${CONTAINER_NAME} || true'
