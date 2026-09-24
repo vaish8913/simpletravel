@@ -1,524 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Holiday Travel Planner</title>
 
-  <title>Travel Freak</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
 
-  <style>
-    :root {
-      --primary: #2563eb;
-      --secondary: #0f172a;
-      --accent: #f59e0b;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1e293b;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --success: #16a34a;
-    }
+        body{
+            background:#f4f7fa;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        header{
+            background:#0a3d62;
+            color:white;
+            text-align:center;
+            padding:25px;
+        }
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
+        header h1{
+            margin-bottom:10px;
+        }
 
-    .container {
-      width: min(1100px, 92%);
-      margin: auto;
-    }
+        .container{
+            width:90%;
+            margin:auto;
+            padding:20px;
+        }
 
-    /* Hero */
-    .hero {
-      min-height: 420px;
-      display: flex;
-      align-items: center;
-      color: white;
-      background:
-        linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.7)),
-        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80")
-        center/cover;
-    }
+        .card{
+            background:white;
+            border-radius:10px;
+            padding:20px;
+            margin-bottom:20px;
+            box-shadow:0 4px 8px rgba(0,0,0,0.1);
+        }
 
-    .hero-content {
-      max-width: 700px;
-      padding: 60px 0;
-    }
+        .country{
+            color:#0a3d62;
+            margin-bottom:10px;
+        }
 
-    .tag {
-      display: inline-block;
-      background: var(--accent);
-      color: #111827;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
+        ul{
+            padding-left:20px;
+        }
 
-    .hero h1 {
-      font-size: clamp(40px, 7vw, 72px);
-      line-height: 1.05;
-      margin-bottom: 18px;
-    }
+        li{
+            margin:6px 0;
+        }
 
-    .hero p {
-      font-size: 18px;
-      color: #e2e8f0;
-    }
+        .budget{
+            color:green;
+            font-weight:bold;
+        }
 
-    /* Trip Info */
-    .trip-info {
-      margin-top: -55px;
-      position: relative;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-    }
-
-    .info-card {
-      background: var(--card);
-      padding: 22px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-    }
-
-    .info-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 5px;
-    }
-
-    .info-card strong {
-      font-size: 17px;
-    }
-
-    /* Main */
-    main {
-      padding: 70px 0;
-    }
-
-    section {
-      margin-bottom: 65px;
-    }
-
-    .section-title {
-      font-size: 30px;
-      margin-bottom: 25px;
-      color: var(--secondary);
-    }
-
-    /* Checklist */
-    .pack-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .pack-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 25px;
-      border-radius: 16px;
-    }
-
-    .pack-card h3 {
-      margin-bottom: 15px;
-    }
-
-    .pack-card label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 0;
-      cursor: pointer;
-    }
-
-    .pack-card input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--primary);
-    }
-
-    .pack-card input:checked + span {
-      color: var(--muted);
-      text-decoration: line-through;
-    }
-
-    /* Progress */
-    .progress-box {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      margin-bottom: 25px;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .progress {
-      height: 10px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: var(--success);
-      transition: width 0.3s ease;
-    }
-
-    /* Itinerary */
-    .timeline {
-      display: grid;
-      gap: 15px;
-    }
-
-    .day {
-      background: white;
-      border-left: 5px solid var(--primary);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
-    }
-
-    .day h3 {
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-
-    /* Budget */
-    .budget {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .budget-card {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-    }
-
-    .budget-card small {
-      color: var(--muted);
-    }
-
-    .budget-card strong {
-      display: block;
-      font-size: 28px;
-      margin-top: 5px;
-    }
-
-    /* Footer */
-    footer {
-      background: var(--secondary);
-      color: white;
-      text-align: center;
-      padding: 35px 20px;
-    }
-
-    footer p {
-      color: #94a3b8;
-      margin-top: 5px;
-    }
-
-    /* Mobile */
-    @media (max-width: 800px) {
-      .info-grid,
-      .pack-grid,
-      .budget {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 550px) {
-      .info-grid,
-      .pack-grid,
-      .budget {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        min-height: 500px;
-      }
-
-      main {
-        padding-top: 50px;
-      }
-    }
-  </style>
+        footer{
+            text-align:center;
+            padding:20px;
+            background:#0a3d62;
+            color:white;
+            margin-top:20px;
+        }
+    </style>
 </head>
-
 <body>
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="container hero-content">
-      <span class="tag">TRAVEL PACK 2026</span>
+<header>
+    <h1>🌏 Holiday Travel Planner</h1>
+    <p>Explore Top International Destinations & Travel Requirements</p>
+</header>
 
-      <!-- CUSTOMIZE THIS -->
-      <h1>Explore Kyoto</h1>
+<div class="container">
 
-      <p>
-        A personalized travel pack for discovering temples, food,
-        culture, and unforgettable streets.
-      </p>
+    <div class="card">
+        <h2 class="country">🇦🇪 Dubai, UAE</h2>
+        <ul>
+            <li><strong>Best Season:</strong> November - March</li>
+            <li><strong>Visa:</strong> Tourist Visa Required</li>
+            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
+            <li><strong>Stay Duration:</strong> 4-7 Days</li>
+            <li><strong>Top Attractions:</strong> Burj Khalifa, Desert Safari, Dubai Mall</li>
+            <li class="budget">Estimated Budget: ₹60,000 - ₹1,20,000 per person</li>
+        </ul>
     </div>
-  </header>
 
-  <!-- TRIP INFORMATION -->
-  <div class="trip-info">
-    <div class="container">
-      <div class="info-grid">
-
-        <div class="info-card">
-          <span>📍 Destination</span>
-          <strong>Hochi, Japan</strong>
-        </div>
-
-        <div class="info-card">
-          <span>📅 Dates</span>
-          <strong>12 – 18 Nov 2026</strong>
-        </div>
-
-        <div class="info-card">
-          <span>👥 Travelers</span>
-          <strong>2 People</strong>
-        </div>
-
-        <div class="info-card">
-          <span>🌤️ Trip Style</span>
-          <strong>Culture & Adventure</strong>
-        </div>
-
-      </div>
+    <div class="card">
+        <h2 class="country">🇸🇬 Singapore</h2>
+        <ul>
+            <li><strong>Best Season:</strong> February - April</li>
+            <li><strong>Visa:</strong> Tourist Visa Required</li>
+            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
+            <li><strong>Stay Duration:</strong> 5-6 Days</li>
+            <li><strong>Top Attractions:</strong> Sentosa, Marina Bay Sands, Universal Studios</li>
+            <li class="budget">Estimated Budget: ₹75,000 - ₹1,50,000 per person</li>
+        </ul>
     </div>
-  </div>
 
-  <main class="container">
+    <div class="card">
+        <h2 class="country">🇹🇭 Thailand</h2>
+        <ul>
+            <li><strong>Best Season:</strong> November - February</li>
+            <li><strong>Visa:</strong> Check latest entry requirements</li>
+            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
+            <li><strong>Stay Duration:</strong> 5-8 Days</li>
+            <li><strong>Top Attractions:</strong> Bangkok, Phuket, Pattaya</li>
+            <li class="budget">Estimated Budget: ₹50,000 - ₹1,00,000 per person</li>
+        </ul>
+    </div>
 
-    <!-- PACKING LIST -->
-    <section>
-      <h2 class="section-title">🎒 Packing Checklist</h2>
+    <div class="card">
+        <h2 class="country">🇫🇷 France</h2>
+        <ul>
+            <li><strong>Best Season:</strong> April - June</li>
+            <li><strong>Visa:</strong> Schengen Visa Required</li>
+            <li><strong>Travel Insurance:</strong> Mandatory</li>
+            <li><strong>Stay Duration:</strong> 7-10 Days</li>
+            <li><strong>Top Attractions:</strong> Eiffel Tower, Louvre Museum, Paris City Tour</li>
+            <li class="budget">Estimated Budget: ₹1,50,000 - ₹3,00,000 per person</li>
+        </ul>
+    </div>
 
-      <div class="progress-box">
-        <div class="progress-header">
-          <strong>Packing progress</strong>
-          <span id="progressText">0%</span>
-        </div>
+    <div class="card">
+        <h2 class="country">🇨🇭 Switzerland</h2>
+        <ul>
+            <li><strong>Best Season:</strong> May - September</li>
+            <li><strong>Visa:</strong> Schengen Visa Required</li>
+            <li><strong>Travel Insurance:</strong> Mandatory</li>
+            <li><strong>Stay Duration:</strong> 7-10 Days</li>
+            <li><strong>Top Attractions:</strong> Zurich, Interlaken, Jungfraujoch</li>
+            <li class="budget">Estimated Budget: ₹2,00,000 - ₹4,00,000 per person</li>
+        </ul>
+    </div>
 
-        <div class="progress">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-      </div>
+    <div class="card">
+        <h2 class="country">🇯🇵 Japan</h2>
+        <ul>
+            <li><strong>Best Season:</strong> March - May</li>
+            <li><strong>Visa:</strong> Tourist Visa Required</li>
+            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
+            <li><strong>Stay Duration:</strong> 7-10 Days</li>
+            <li><strong>Top Attractions:</strong> Tokyo, Kyoto, Mount Fuji</li>
+            <li class="budget">Estimated Budget: ₹1,80,000 - ₹3,50,000 per person</li>
+        </ul>
+    </div>
 
-      <div class="pack-grid">
+    <div class="card">
+        <h2 class="country">✅ General Travel Checklist</h2>
+        <ul>
+            <li>Valid Passport</li>
+            <li>Visa Approval (if applicable)</li>
+            <li>Flight Tickets</li>
+            <li>Hotel Reservations</li>
+            <li>Travel Insurance</li>
+            <li>Foreign Currency / Forex Card</li>
+            <li>International Roaming / eSIM</li>
+            <li>Emergency Contact Information</li>
+        </ul>
+    </div>
 
-        <div class="pack-card">
-          <h3>👕 Clothing</h3>
+</div>
 
-          <label>
-            <input type="checkbox">
-            <span>T-Shirts</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Jeans / Trousers</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Light Jacket</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Comfortable Shoes</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Sleepwear</span>
-          </label>
-        </div>
-
-        <div class="pack-card">
-          <h3>🧴 Essentials</h3>
-
-          <label>
-            <input type="checkbox">
-            <span>Toothbrush</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Toothpaste</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Sunscreen</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Skincare</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Travel Towel</span>
-          </label>
-        </div>
-
-        <div class="pack-card">
-          <h3>📱 Electronics</h3>
-
-          <label>
-            <input type="checkbox">
-            <span>Phone</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Charger</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Power Bank</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Travel Adapter</span>
-          </label>
-
-          <label>
-            <input type="checkbox">
-            <span>Camera</span>
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ITINERARY -->
-    <section>
-      <h2 class="section-title">🗺️ Trip Itinerary</h2>
-
-      <div class="timeline">
-
-        <div class="day">
-          <h3>Day 1 — Arrival</h3>
-          <p>Check in, explore the neighborhood and enjoy a relaxed local dinner.</p>
-        </div>
-
-        <div class="day">
-          <h3>Day 2 — Traditional Kyoto</h3>
-          <p>Visit temples, traditional streets and local cultural attractions.</p>
-        </div>
-
-        <div class="day">
-          <h3>Day 3 — Food & Street Shopping</h3>
-          <p>Explore local markets, try regional dishes and discover hidden cafés.</p>
-        </div>
-
-        <div class="day">
-          <h3>Day 4 — Nature</h3>
-          <p>Spend the day hiking and exploring Kyoto's surrounding natural areas.</p>
-        </div>
-
-        <div class="day">
-          <h3>Day 5 — Self Charging Day</h3>
-          <p>Shopping, photography, cafés and anything you missed earlier.</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- BUDGET -->
-    <section>
-      <h2 class="section-title">💰 Travel Budget</h2>
-
-      <div class="budget">
-
-        <div class="budget-card">
-          <small>Accommodation</small>
-          <strong>¥80,000</strong>
-        </div>
-
-        <div class="budget-card">
-          <small>Food</small>
-          <strong>¥35,000</strong>
-        </div>
-
-        <div class="budget-card">
-          <small>Activities</small>
-          <strong>¥25,000</strong>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <h3>✈️ Japan Travel Pack</h3>
-    <p>Plan less. Explore more.</p>
-  </footer>
-
-  <script>
-    const checkboxes = document.querySelectorAll(
-      '.pack-card input[type="checkbox"]'
-    );
-
-    const progressBar = document.getElementById("progressBar");
-    const progressText = document.getElementById("progressText");
-
-    function updateProgress() {
-      const total = checkboxes.length;
-
-      const completed = [...checkboxes].filter(
-        checkbox => checkbox.checked
-      ).length;
-
-      const percentage = total
-        ? Math.round((completed / total) * 100)
-        : 0;
-
-      progressBar.style.width = percentage + "%";
-      progressText.textContent = percentage + "%";
-    }
-
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", updateProgress);
-    });
-
-    updateProgress();
-  </script>
+<footer>
+    © 2026 Global Holiday Travel Planner | Happy Journey ✈️
+</footer>
 
 </body>
 </html>
