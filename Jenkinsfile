@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME     = "worldtour"
+        IMAGE_NAME     = "CountryTourism"
         IMAGE_TAG      = "v1"
-        CONTAINER_NAME = "worldtour"
+        CONTAINER_NAME = "CountryTourism"
     }
 
     triggers {
