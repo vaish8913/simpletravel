@@ -1,175 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Holiday Travel Planner</title>
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>World Tour</title> <style> * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        min-height: 100vh;
+    }
 
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: Arial, sans-serif;
-        }
+    header {
+        text-align: center;
+        padding: 80px 20px 40px;
+    }
 
-        body{
-            background:#f4f7fa;
-        }
+    header h1 {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+    }
 
-        header{
-            background:#0a3d62;
-            color:white;
-            text-align:center;
-            padding:25px;
-        }
+    header p {
+        font-size: 1.2rem;
+        color: #d6eaf0;
+    }
 
-        header h1{
-            margin-bottom:10px;
-        }
+    .destinations {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+    }
 
-        .container{
-            width:90%;
-            margin:auto;
-            padding:20px;
-        }
+    .card {
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 15px;
+        padding: 30px 20px;
+        text-align: center;
+        backdrop-filter: blur(8px);
+        transition: transform 0.3s;
+    }
 
-        .card{
-            background:white;
-            border-radius:10px;
-            padding:20px;
-            margin-bottom:20px;
-            box-shadow:0 4px 8px rgba(0,0,0,0.1);
-        }
+    .card:hover {
+        transform: translateY(-8px);
+    }
 
-        .country{
-            color:#0a3d62;
-            margin-bottom:10px;
-        }
+    .card .emoji {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
 
-        ul{
-            padding-left:20px;
-        }
+    .card h2 {
+        margin-bottom: 10px;
+    }
 
-        li{
-            margin:6px 0;
-        }
+    .card p {
+        color: #d6eaf0;
+    }
 
-        .budget{
-            color:green;
-            font-weight:bold;
-        }
+    footer {
+        text-align: center;
+        padding: 40px 20px;
+        color: #b8d1d8;
+    }
+</style>
 
-        footer{
-            text-align:center;
-            padding:20px;
-            background:#0a3d62;
-            color:white;
-            margin-top:20px;
-        }
-    </style>
-</head>
-<body>
-
+</head> <body>
 <header>
-    <h1>🌏 Holiday Travel Planner</h1>
-    <p>Explore Top International Destinations & Travel Requirements</p>
+    <h1>🌍 World Tour</h1>
+    <p>Explore the most amazing destinations around the world</p>
 </header>
 
-<div class="container">
+<section class="destinations">
 
     <div class="card">
-        <h2 class="country">🇦🇪 Dubai, UAE</h2>
-        <ul>
-            <li><strong>Best Season:</strong> November - March</li>
-            <li><strong>Visa:</strong> Tourist Visa Required</li>
-            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
-            <li><strong>Stay Duration:</strong> 4-7 Days</li>
-            <li><strong>Top Attractions:</strong> Burj Khalifa, Desert Safari, Dubai Mall</li>
-            <li class="budget">Estimated Budget: ₹60,000 - ₹1,20,000 per person</li>
-        </ul>
+        <div class="emoji">🗼</div>
+        <h2>Paris</h2>
+        <p>Experience the Eiffel Tower and the beauty of France.</p>
     </div>
 
     <div class="card">
-        <h2 class="country">🇸🇬 Singapore</h2>
-        <ul>
-            <li><strong>Best Season:</strong> February - April</li>
-            <li><strong>Visa:</strong> Tourist Visa Required</li>
-            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
-            <li><strong>Stay Duration:</strong> 5-6 Days</li>
-            <li><strong>Top Attractions:</strong> Sentosa, Marina Bay Sands, Universal Studios</li>
-            <li class="budget">Estimated Budget: ₹75,000 - ₹1,50,000 per person</li>
-        </ul>
+        <div class="emoji">🗽</div>
+        <h2>New York</h2>
+        <p>Discover Times Square, Central Park and Manhattan.</p>
     </div>
 
     <div class="card">
-        <h2 class="country">🇹🇭 Thailand</h2>
-        <ul>
-            <li><strong>Best Season:</strong> November - February</li>
-            <li><strong>Visa:</strong> Check latest entry requirements</li>
-            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
-            <li><strong>Stay Duration:</strong> 5-8 Days</li>
-            <li><strong>Top Attractions:</strong> Bangkok, Phuket, Pattaya</li>
-            <li class="budget">Estimated Budget: ₹50,000 - ₹1,00,000 per person</li>
-        </ul>
+        <div class="emoji">🗾</div>
+        <h2>Tokyo</h2>
+        <p>Explore Japan's vibrant culture, technology and cuisine.</p>
     </div>
 
     <div class="card">
-        <h2 class="country">🇫🇷 France</h2>
-        <ul>
-            <li><strong>Best Season:</strong> April - June</li>
-            <li><strong>Visa:</strong> Schengen Visa Required</li>
-            <li><strong>Travel Insurance:</strong> Mandatory</li>
-            <li><strong>Stay Duration:</strong> 7-10 Days</li>
-            <li><strong>Top Attractions:</strong> Eiffel Tower, Louvre Museum, Paris City Tour</li>
-            <li class="budget">Estimated Budget: ₹1,50,000 - ₹3,00,000 per person</li>
-        </ul>
+        <div class="emoji">🏛️</div>
+        <h2>Rome</h2>
+        <p>Walk through ancient history in the heart of Italy.</p>
     </div>
 
     <div class="card">
-        <h2 class="country">🇨🇭 Switzerland</h2>
-        <ul>
-            <li><strong>Best Season:</strong> May - September</li>
-            <li><strong>Visa:</strong> Schengen Visa Required</li>
-            <li><strong>Travel Insurance:</strong> Mandatory</li>
-            <li><strong>Stay Duration:</strong> 7-10 Days</li>
-            <li><strong>Top Attractions:</strong> Zurich, Interlaken, Jungfraujoch</li>
-            <li class="budget">Estimated Budget: ₹2,00,000 - ₹4,00,000 per person</li>
-        </ul>
+        <div class="emoji">🕌</div>
+        <h2>Dubai</h2>
+        <p>Experience modern architecture and desert adventures.</p>
     </div>
 
     <div class="card">
-        <h2 class="country">🇯🇵 Japan</h2>
-        <ul>
-            <li><strong>Best Season:</strong> March - May</li>
-            <li><strong>Visa:</strong> Tourist Visa Required</li>
-            <li><strong>Passport Validity:</strong> Minimum 6 Months</li>
-            <li><strong>Stay Duration:</strong> 7-10 Days</li>
-            <li><strong>Top Attractions:</strong> Tokyo, Kyoto, Mount Fuji</li>
-            <li class="budget">Estimated Budget: ₹1,80,000 - ₹3,50,000 per person</li>
-        </ul>
+        <div class="emoji">🏝️</div>
+        <h2>Maldives</h2>
+        <p>Relax on beautiful beaches surrounded by crystal-clear water.</p>
     </div>
 
-    <div class="card">
-        <h2 class="country">✅ General Travel Checklist for ALL</h2>
-        <ul>
-            <li>Valid Passport</li>
-            <li>Visa Approval (if applicable)</li>
-            <li>Flight Tickets</li>
-            <li>Hotel Reservations</li>
-            <li>Travel Insurance</li>
-            <li>Foreign Currency / Forex Card</li>
-            <li>International Roaming / eSIM</li>
-            <li>Emergency Contact Information</li>
-            <li>Foreign Currency/Forex</li>
-        </ul>
-    </div>
-
-</div>
+</section>
 
 <footer>
-    © 2026 Global Holiday Travel Planner | Happy Journey ✈️
+    <p>© 2026 World Tour | Travel • Explore • Discover</p>
 </footer>
 
-</body>
-</html>
+</body> </html>
