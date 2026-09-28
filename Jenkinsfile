@@ -1,65 +1,62 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME     = "countrytourism"
-        IMAGE_TAG      = "v1"
-        CONTAINER_NAME = "countrytourism"
-    }
-
-    triggers {
-        pollSCM('H/5 * * * *')   // or use githubPush() with a webhook configured
-    }
-
     stages {
 
-        stage('Clone Repository') {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+
+        stage('Build DEV Image') {
             steps {
                 sh '''
-                    rm -rf simpletravel
-                    git clone https://github.com/vaish8913/simpletravel.git
+                    docker build \
+                        -t simpletravel:dev \
+                        .
                 '''
             }
         }
 
-        stage('Remove Old Container') {
-            steps {
-                sh 'docker rm -f ${CONTAINER_NAME} || true'
-            }
-        }
-        stage('Build Docker Image') {
+        stage('Stop Old DEV Container') {
             steps {
                 sh '''
-                    cd simpletravel
-                    docker build -t countrytourism:v1 .
-                 '''
-                }
+                    docker rm -f simpletravel-dev || true
+                '''
+            }
         }
 
-        stage('Deploy') {
+        stage('Deploy DEV') {
             steps {
                 sh '''
                     docker run -d \
-                      --name ${CONTAINER_NAME} \
-                      -p 7080:80 \
-                      ${IMAGE_NAME}:${IMAGE_TAG}
+                        --name simpletravel-dev \
+                        -p 7081:80 \
+                        simpletravel:dev
                 '''
             }
         }
 
-        stage('Check Container') {
+        stage('Verify DEV') {
             steps {
-                sh 'docker ps'
+                sh '''
+                    docker ps
+                    docker inspect simpletravel-dev
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Deployed successfully.'
+            echo 'DEV deployment successful!'
+            echo 'Application: http://YOUR_SERVER:7081'
         }
+
         failure {
-            echo 'Pipeline failed or was skipped (no index.html change).'
+            echo 'DEV deployment failed!'
         }
     }
 }
