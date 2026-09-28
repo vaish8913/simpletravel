@@ -1,62 +1,88 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['dev', 'prod'],
+            description: 'Select deployment environment'
+        )
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out source code...'
                 checkout scm
             }
         }
 
-        stage('Build DEV Image') {
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                    docker build \
-                        -t simpletravel:dev \
-                        .
-                '''
+                script {
+                    sh """
+                        docker build \
+                            -t simpletravel:${params.ENVIRONMENT} \
+                            .
+                    """
+                }
             }
         }
 
-        stage('Stop Old DEV Container') {
+        stage('Remove Existing Container') {
             steps {
-                sh '''
-                    docker rm -f simpletravel-dev || true
-                '''
+                script {
+                    def containerName =
+                        params.ENVIRONMENT == 'prod'
+                        ? 'simpletravel-prod'
+                        : 'simpletravel-dev'
+
+                    sh """
+                        docker rm -f ${containerName} || true
+                    """
+                }
             }
         }
 
-        stage('Deploy DEV') {
+        stage('Deploy') {
             steps {
-                sh '''
-                    docker run -d \
-                        --name simpletravel-dev \
-                        -p 7081:80 \
-                        simpletravel:dev
-                '''
+                script {
+
+                    def containerName
+                    def port
+
+                    if (params.ENVIRONMENT == 'prod') {
+                        containerName = 'simpletravel-prod'
+                        port = '7080'
+                    } else {
+                        containerName = 'simpletravel-dev'
+                        port = '7081'
+                    }
+
+                    sh """
+                        docker run -d \
+                            --name ${containerName} \
+                            -p ${port}:80 \
+                            simpletravel:${params.ENVIRONMENT}
+                    """
+                }
             }
         }
 
-        stage('Verify DEV') {
+        stage('Verify') {
             steps {
-                sh '''
-                    docker ps
-                    docker inspect simpletravel-dev
-                '''
+                sh 'docker ps'
             }
         }
     }
 
     post {
         success {
-            echo 'DEV deployment successful!'
-            echo 'Application: http://YOUR_SERVER:7081'
+            echo "Deployment successful!"
         }
 
         failure {
-            echo 'DEV deployment failed!'
+            echo "Deployment failed!"
         }
     }
 }
