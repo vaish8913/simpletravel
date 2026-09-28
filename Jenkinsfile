@@ -27,6 +27,14 @@ pipeline {
                 sh 'docker rm -f ${CONTAINER_NAME} || true'
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    cd simpletravel
+                    docker build -t countrytourism:v1 .
+                 '''
+                }
+        }
 
         stage('Deploy') {
             steps {
