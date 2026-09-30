@@ -64,7 +64,7 @@ resource "aws_instance" "my_ec2" {
   user_data = file("${path.module}/user_data.sh")
 
   tags = {
-    Name = "jenkins-docker-instance"
+    Name = "jenkins-docker-Terra"
   }
 }
 
