@@ -1,10 +1,11 @@
 pipeline {
     agent any 
     stages {
-        stage('Pull') { 
+        stage('Pull') {
             steps {
-                git 'https://github.com/vaish8913/simpletravel.git'
-            }
+                    git branch: 'main',
+                    url: 'https://github.com/vaish8913/simpletravel.git'
+                    }
         }
         stage('terraform init') {
             steps {
