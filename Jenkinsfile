@@ -1,88 +1,30 @@
 pipeline {
-    agent any
-
-    parameters {
-        choice(
-            name: 'ENVIRONMENT',
-            choices: ['dev', 'prod'],
-            description: 'Select deployment environment'
-        )
-    }
-
+    agent any 
     stages {
-
-        stage('Checkout') {
+        stage('Pull') { 
             steps {
-                checkout scm
+                git 'https://github.com/nivas-22/Jenkins-Terra.git'
             }
         }
-
-        stage('Build Docker Image') {
+        stage('terraform init') {
             steps {
-                script {
-                    sh """
-                        docker build \
-                            -t simpletravel:${params.ENVIRONMENT} \
-                            .
-                    """
-                }
+                sh 'terraform init'
             }
         }
-
-        stage('Remove Existing Container') {
+        stage('terraform plan') {
             steps {
-                script {
-                    def containerName =
-                        params.ENVIRONMENT == 'prod'
-                        ? 'simpletravel-prod'
-                        : 'simpletravel-dev'
-
-                    sh """
-                        docker rm -f ${containerName} || true
-                    """
-                }
+                sh 'terraform plan'
             }
         }
-
-        stage('Deploy') {
+        stage('terraform validate') {
             steps {
-                script {
-
-                    def containerName
-                    def port
-
-                    if (params.ENVIRONMENT == 'prod') {
-                        containerName = 'simpletravel-prod'
-                        port = '7080'
-                    } else {
-                        containerName = 'simpletravel-dev'
-                        port = '7081'
-                    }
-
-                    sh """
-                        docker run -d \
-                            --name ${containerName} \
-                            -p ${port}:80 \
-                            simpletravel:${params.ENVIRONMENT}
-                    """
-                }
+                sh 'terraform validate'
             }
         }
-
-        stage('Verify') {
+        stage('terraform apply') {
             steps {
-                sh 'docker ps'
+                sh 'terraform ${Action} --auto-approve'
             }
-        }
-    }
-
-    post {
-        success {
-            echo "Deployment successful!"
-        }
-
-        failure {
-            echo "Deployment failed!"
         }
     }
 }
