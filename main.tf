@@ -24,7 +24,7 @@ variable "allowed_ssh_cidr" {
 }
 
 resource "aws_security_group" "jenkins_sg" {
-  name        = "jenkins-docker-sg"
+  name        = "jenkins-terra"
   description = "Allow SSH, Jenkins UI, HTTP and HTTPS"
 
   ingress {
@@ -67,7 +67,7 @@ resource "aws_security_group" "jenkins_sg" {
   }
 
   tags = {
-    Name = "jenkins-docker-sg"
+    Name = "jenkins-terra-sg"
   }
 }
 
