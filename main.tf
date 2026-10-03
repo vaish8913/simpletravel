@@ -12,20 +12,20 @@ provider "aws" {
 }
 
 variable "key_name" {
-  description = "Name of an existing EC2 key pair in ap-south-1 (used for SSH access)"
+  description = "Name of an existing EC2 key pair in ap-south-1"
   type        = string
   default     = "portfolio_key"
 }
 
 variable "allowed_ssh_cidr" {
-  description = "CIDR block allowed to SSH into the instance (e.g. your IP/32)"
+  description = "CIDR block allowed to SSH into the instance"
   type        = string
   default     = "0.0.0.0/0"
 }
 
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins-docker-sg"
-  description = "Allow SSH, Jenkins UI, and HTTP/HTTPS"
+  description = "Allow SSH, Jenkins UI, HTTP and HTTPS"
 
   ingress {
     description = "SSH"
@@ -39,6 +39,22 @@ resource "aws_security_group" "jenkins_sg" {
     description = "Jenkins UI"
     from_port   = 8080
     to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTPS"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -57,11 +73,16 @@ resource "aws_security_group" "jenkins_sg" {
 
 resource "aws_instance" "my_ec2" {
   ami                    = "ami-006f82a1d5a27da54"
-  instance_type          = "t2.micro"
+  instance_type          = "t3.2xlarge"
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
   user_data = file("${path.module}/user_data.sh")
+
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+  }
 
   tags = {
     Name = "jenkins-docker-Terra"
@@ -69,13 +90,16 @@ resource "aws_instance" "my_ec2" {
 }
 
 output "instance_id" {
-  value = aws_instance.my_ec2.id
+  description = "EC2 Instance ID"
+  value       = aws_instance.my_ec2.id
 }
 
 output "public_ip" {
-  value = aws_instance.my_ec2.public_ip
+  description = "Public IP of Jenkins Server"
+  value       = aws_instance.my_ec2.public_ip
 }
 
 output "jenkins_url" {
-  value = "http://${aws_instance.my_ec2.public_ip}:8080"
+  description = "Jenkins URL"
+  value       = "http://${aws_instance.my_ec2.public_ip}:8080"
 }
