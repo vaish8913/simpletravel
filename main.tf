@@ -25,7 +25,7 @@ variable "allowed_ssh_cidr" {
 
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins-terra"
-  description = "Allow SSH, Jenkins UI, HTTP and HTTPS"
+  description = "Allow SSH, Jenkins UI, HTTP, HTTPS and website"
 
   ingress {
     description = "SSH"
@@ -59,6 +59,14 @@ resource "aws_security_group" "jenkins_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Website"
+    from_port   = 7080
+    to_port     = 7080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -73,11 +81,12 @@ resource "aws_security_group" "jenkins_sg" {
 
 resource "aws_instance" "my_ec2" {
   ami                    = "ami-006f82a1d5a27da54"
-  instance_type          = "t3.2xlarge"
+  instance_type          = "t3.medium"
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
-  user_data = file("${path.module}/user_data.sh")
+  user_data                   = file("${path.module}/user_data.sh")
+  user_data_replace_on_change = true
 
   root_block_device {
     volume_size = 30
@@ -95,11 +104,16 @@ output "instance_id" {
 }
 
 output "public_ip" {
-  description = "Public IP of Jenkins Server"
+  description = "Public IP of the server"
   value       = aws_instance.my_ec2.public_ip
 }
 
 output "jenkins_url" {
   description = "Jenkins URL"
   value       = "http://${aws_instance.my_ec2.public_ip}:8080"
+}
+
+output "website_url" {
+  description = "Website URL"
+  value       = "http://${aws_instance.my_ec2.public_ip}:7080"
 }
