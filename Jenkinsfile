@@ -1,20 +1,15 @@
 pipeline {
-    agent any 
+    agent any
     stages {
         stage('Pull') {
             steps {
-                    git branch: 'main',
+                git branch: 'main',
                     url: 'https://github.com/vaish8913/simpletravel.git'
-                    }
+            }
         }
         stage('terraform init') {
             steps {
                 sh 'terraform init'
-            }
-        }
-        stage('terraform plan') {
-            steps {
-                sh 'terraform plan'
             }
         }
         stage('terraform validate') {
@@ -22,9 +17,14 @@ pipeline {
                 sh 'terraform validate'
             }
         }
+        stage('terraform plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
         stage('terraform apply') {
             steps {
-                sh 'terraform ${Action} --auto-approve'
+                sh 'terraform apply -auto-approve tfplan'
             }
         }
     }
