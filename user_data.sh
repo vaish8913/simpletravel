@@ -123,3 +123,9 @@ echo
 echo "========================================="
 echo " SETUP COMPLETE "
 echo "========================================="
+
+git clone https://github.com/vaish8913/simpletravel.git /opt/simpletravel
+cd /opt/simpletravel
+docker build -t simpletravel:latest .
+docker rm -f web 2>/dev/null || true
+docker run -d --name web --restart unless-stopped -p 7080:80 simpletravel:latest
